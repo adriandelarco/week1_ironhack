@@ -5,7 +5,7 @@ class Blog
 	def initialize
 		@posts = []
 		@number_of_pages = 0
-		@a = 0
+		@first_post = 0
 		@active_page = 1
 	end
 
@@ -20,11 +20,11 @@ class Blog
 
 	def publish_posts
 
-		@page = @posts.slice(@a, 3)
+		@page = @posts.slice(@first_post, 3)
 		#Imprimir la pagina
 		@page.each_with_index do |post, index|
 			#Publica cada post
-			if post.sponsored == 1
+			if post.sponsored == 1 
 				puts "******" + post.title.colorize(:red)	+ "******"
 			else
 				puts post.title.colorize(:red)
@@ -59,8 +59,7 @@ class Blog
 	end
 
 	def create_front_page
-
-		
+	
 		@number_of_pages = 0
 		@posts.each_with_index do |post, index|
 			if (index % 3 == 0)
@@ -69,31 +68,38 @@ class Blog
 		end
 		publish_posts
 		if @number_of_pages > 0
-			move_page
+			ask_move_page
 		end
 
 	end
 
-	def move_page
+	def ask_move_page
 
 		move_to_page = gets.chomp
 
-		if move_to_page == "next" && (@a + 4) < (@posts.length + 1)
-			@active_page += 1
-			@a += 3
-			@page = @posts.slice(@a,3)
-			create_front_page
-		elsif move_to_page == "prev" && (@a - 2) > 0
-			@active_page -= 1
-			@a -= 3
-			@page = @posts.slice(@a,3)
-			create_front_page
+		if move_to_page == "next" && (@first_post + 4) < (@posts.length + 1)
+			move_page("next")
+		elsif move_to_page == "prev" && (@first_post - 2) > 0
+			move_page("prev")
 		elsif move_to_page == "exit"
 		else
 			puts "This is the last page."
-			move_page		
+			ask_move_page		
 		end
 
+	end
+
+	def move_page(nextorback)
+
+		if nextorback == "next"
+			@active_page += 1
+			@first_post += 3
+		elsif nextorback == "prev"
+			@active_page -= 1
+			@first_post -= 3	
+		end
+		@page = @posts.slice(@first_post,3)
+		create_front_page
 	end
 
 end
