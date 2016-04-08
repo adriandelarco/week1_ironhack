@@ -7,7 +7,6 @@ class ShoppingCart
 		@shop = shop
 		@array_of_items = []
 		@hash_items = {}
-		@array_of_printed_items = []
 	end
 	
 	def add_item_to_cart(item)
@@ -32,12 +31,13 @@ class ShoppingCart
 	def show
 		puts "\nSHOPPING LIST".blue
 		puts "-----------------------"
-		@array_of_items.each do |active_item|
+
+		@@total_discount = 0
+		@array_of_items_uniq = @array_of_items.uniq
+
+		@array_of_items_uniq.each do |active_item|
 			n_repeated_item = count_repeated_items(active_item)
-			if !@array_of_printed_items.include?(active_item)
-				puts "#{n_repeated_item} - #{active_item[0]} -  #{active_item[1]}$"
-				@array_of_printed_items.push(active_item)
-			end
+			puts "#{n_repeated_item} - #{active_item[0]} -  #{active_item[1]}$"
 		end
 	    if $free_banana == true 
 	    	puts "-----------------------"
